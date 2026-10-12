@@ -1,3 +1,16 @@
+/** Mensaje estándar cuando la imagen es HEIC de iPhone (no decodificable en navegador) */
+export const HEIC_MSG =
+  "Las fotos HEIC de iPhone no son compatibles: ábrela en Fotos, expórtala como JPG e inténtalo de nuevo.";
+
+/** Detecta HEIC/HEIF por MIME o extensión (formato por defecto de iOS) */
+export function isHeicFile(file: File): boolean {
+  return (
+    file.type === "image/heic" ||
+    file.type === "image/heif" ||
+    /\.hei[c f]$/i.test(file.name)
+  );
+}
+
 /**
  * Compresión client-side a .webp usando Canvas API (HTML5).
  * - Ancho máximo 800px (mantiene aspect-ratio)
@@ -9,7 +22,16 @@ export async function compressToWebp(
   maxWidth = 800,
   quality = 0.8
 ): Promise<Blob> {
-  const bitmap = await createImageBitmap(file);
+  if (isHeicFile(file)) throw new Error(HEIC_MSG);
+
+  let bitmap: ImageBitmap;
+  try {
+    bitmap = await createImageBitmap(file);
+  } catch {
+    throw new Error(
+      "No se pudo leer la imagen. Si es HEIC de iPhone, expórtala como JPG primero."
+    );
+  }
 
   const scale = Math.min(1, maxWidth / bitmap.width);
   const width = Math.round(bitmap.width * scale);

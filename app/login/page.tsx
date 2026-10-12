@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { LockKeyhole } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 import { logAdminActivity } from "@/lib/admin";
+import { isValidLoginInput, toAuthEmail } from "@/lib/username";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,26 +19,32 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
     try {
+      if (!isValidLoginInput(email)) {
+        throw new Error("Ingresa tu usuario o un correo válido.");
+      }
+      // Normalización transparente: "admin1" -> "admin1@grupo.local"
+      const loginEmail = toAuthEmail(email);
       const { data, error } = await supabase.auth.signInWithPassword({
-        email,
+        email: loginEmail,
         password,
       });
       if (error) throw error;
 
-      // Verificar rol
-      const { data: role } = await supabase
+      // Verificar rol (maybeSingle: distingue "sin fila" de error RLS/red)
+      const { data: role, error: roleError } = await supabase
         .from("user_roles")
         .select("role")
         .eq("user_id", data.user.id)
-        .single();
+        .maybeSingle();
 
+      if (roleError) throw new Error(`Error leyendo rol: ${roleError.message}`);
       if (!role) {
         await supabase.auth.signOut();
         throw new Error("Este usuario no tiene rol de administrador.");
       }
 
       // Auditoría silenciosa (sin alertas en pantalla)
-      await logAdminActivity("LOGIN", { email });
+      await logAdminActivity("LOGIN", { email: loginEmail });
 
       router.push(role.role === "super_admin" ? "/super-admin" : "/admin");
     } catch (err: unknown) {
@@ -48,17 +56,22 @@ export default function LoginPage() {
 
   return (
     <div className="mx-auto max-w-sm py-10">
-      <h1 className="text-2xl font-extrabold">🔐 Acceso admin</h1>
+      <h1 className="flex items-center gap-2 text-2xl font-extrabold">
+        <LockKeyhole className="h-6 w-6 text-zinc-400" aria-hidden />
+        Acceso admin
+      </h1>
       <p className="mb-5 text-sm text-zinc-400">
-        Solo personal autorizado del grupo.
+        Solo personal autorizado del grupo. Puedes entrar con tu usuario o tu
+        correo.
       </p>
       <form onSubmit={onSubmit} className="space-y-3">
         <input
-          type="email"
+          type="text"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="admin@grupo.com"
+          placeholder="Usuario o correo (ej. admin1)"
+          autoComplete="username"
           className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none"
         />
         <input

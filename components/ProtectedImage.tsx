@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Eye, User } from "lucide-react";
 
 type Props = {
   revealed: boolean;
@@ -46,8 +47,8 @@ export default function ProtectedImage({
           }`}
         />
       ) : (
-        <div className="flex h-full w-full items-center justify-center bg-zinc-800 text-5xl select-none">
-          👤
+        <div className="flex h-full w-full items-center justify-center bg-zinc-800 select-none">
+          <User className="h-12 w-12 text-zinc-600" aria-hidden />
         </div>
       )}
 
@@ -63,8 +64,9 @@ export default function ProtectedImage({
 
       {!revealed && (
         <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
-          <span className="rounded-full bg-black/70 px-4 py-2 text-xs font-semibold text-white backdrop-blur">
-            👁️ Toca para revelar
+          <span className="flex items-center gap-1.5 rounded-full bg-black/70 px-4 py-2 text-xs font-semibold text-white backdrop-blur">
+            <Eye className="h-3.5 w-3.5" aria-hidden />
+            Toca para revelar
           </span>
         </div>
       )}

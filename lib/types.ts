@@ -14,6 +14,7 @@ export type Presentacion = {
   personalidad: string | null;
   dato_curioso: string | null;
   foto_url: string | null;
+  aprobado: boolean;
   created_at: string;
 };
 

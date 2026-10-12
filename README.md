@@ -1,4 +1,4 @@
-# Presentaciones WA 🎭
+# Presentaciones WA
 
 Galería responsive (mobile-first) de presentaciones de un grupo de WhatsApp.
 Next.js 14 (App Router) + Tailwind + Supabase.

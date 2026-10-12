@@ -2,26 +2,26 @@ import type { Presentacion, PresentacionInput } from "./types";
 
 type MsgInput = Partial<PresentacionInput | Presentacion>;
 
-/** Plantilla de presentación en texto plano para WhatsApp */
+/** Plantilla de presentación en texto plano para WhatsApp (sin emojis) */
 export function buildPresentationMessage(p: MsgInput): string {
   const lines = [
-    "✨ *NUEVA PRESENTACIÓN* ✨",
+    "*NUEVA PRESENTACIÓN*",
     "",
-    `👤 *Nombre:* ${p.nombre ?? "-"}`,
-    `🎂 *Edad:* ${p.edad ?? "-"}`,
-    `🌍 *País:* ${p.pais ?? "-"}`,
-    `⚧️ *Género:* ${p.genero ?? "-"}`,
-    `📱 *WhatsApp:* ${p.whatsapp_user ?? "-"}`,
+    `*Nombre:* ${p.nombre ?? "-"}`,
+    `*Edad:* ${p.edad ?? "-"}`,
+    `*País:* ${p.pais ?? "-"}`,
+    `*Género:* ${p.genero ?? "-"}`,
+    `*WhatsApp:* ${p.whatsapp_user ?? "-"}`,
     "",
-    `🎌 *Anime favorito:* ${p.anime_favorito ?? "-"}`,
-    `🎨 *Color favorito:* ${p.color_favorito ?? "-"}`,
-    `🎵 *Música favorita:* ${p.musica_favorita ?? "-"}`,
-    `🎯 *Pasatiempos:* ${p.pasatiempos ?? "-"}`,
+    `*Anime favorito:* ${p.anime_favorito ?? "-"}`,
+    `*Color favorito:* ${p.color_favorito ?? "-"}`,
+    `*Música favorita:* ${p.musica_favorita ?? "-"}`,
+    `*Pasatiempos:* ${p.pasatiempos ?? "-"}`,
     "",
-    `💖 *Gustos:* ${p.gustos ?? "-"}`,
-    `💔 *Disgustos:* ${p.disgustos ?? "-"}`,
-    `🧠 *Personalidad:* ${p.personalidad ?? "-"}`,
-    `🤯 *Dato curioso:* ${p.dato_curioso ?? "-"}`,
+    `*Gustos:* ${p.gustos ?? "-"}`,
+    `*Disgustos:* ${p.disgustos ?? "-"}`,
+    `*Personalidad:* ${p.personalidad ?? "-"}`,
+    `*Dato curioso:* ${p.dato_curioso ?? "-"}`,
   ];
   return lines.join("\n");
 }

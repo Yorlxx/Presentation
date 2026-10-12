@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Clapperboard, Gamepad2 } from "lucide-react";
 import type { Presentacion } from "@/lib/types";
 import ProtectedImage from "./ProtectedImage";
 
@@ -32,8 +33,12 @@ export default function MemberCard({ m }: { m: Presentacion }) {
         <p className="truncate text-sm text-emerald-400">
           {m.whatsapp_user || "sin WA"}
         </p>
-        <p className="line-clamp-2 text-sm text-zinc-300">
-          🎯 {m.pasatiempos || "—"} · 🎌 {m.anime_favorito || "—"}
+        <p className="flex items-center gap-1.5 text-sm text-zinc-300">
+          <Gamepad2 className="h-4 w-4 shrink-0 text-zinc-500" aria-hidden />
+          <span className="line-clamp-2">
+            {m.pasatiempos || "—"} · {m.anime_favorito || "—"}
+          </span>
+          <Clapperboard className="h-4 w-4 shrink-0 text-zinc-500" aria-hidden />
         </p>
         <Link
           href={`/perfil/${m.id}`}

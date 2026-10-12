@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  @apply bg-zinc-950 text-zinc-100;
+}
+
+body {
+  @apply min-h-screen bg-zinc-950 text-zinc-100 antialiased;
+}
+
+/* Bloqueo extra anti-selección en fotos protegidas */
+img.protected {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
